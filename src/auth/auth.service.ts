@@ -1,11 +1,11 @@
-import { Injectable, ConflictException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from '../users/entities/user.entity';
-import { RegisterDto } from './dto/register.dto';
-import * as bcrypt from 'bcrypt';
-import { AuthPayloadDto } from './dto/auth.dto';
+import { Injectable, ConflictException } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { User } from "../users/entities/user.entity";
+import { RegisterDto } from "./dto/register.dto";
+import * as bcrypt from "bcrypt";
+import { AuthPayloadDto } from "./dto/auth.dto";
 
 @Injectable()
 export class AuthService {
@@ -16,12 +16,12 @@ export class AuthService {
   ) {}
 
   async register(registerDto: RegisterDto): Promise<any> {
-    const existingUser = await this.usersRepository.findOne(
-        { where: { email: registerDto.email } }
-    );
-    
+    const existingUser = await this.usersRepository.findOne({
+      where: { email: registerDto.email },
+    });
+
     if (existingUser) {
-        throw new ConflictException('Registration failed');
+      throw new ConflictException("Registration failed");
     }
 
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
@@ -32,12 +32,12 @@ export class AuthService {
 
     await this.usersRepository.save(newUser);
 
-    return { message: 'Registration successful' };
+    return { message: "Registration successful" };
   }
 
   async validateUser({ email, password }: AuthPayloadDto) {
     const findUser = await this.usersRepository.findOne({ where: { email } });
-    if (findUser && await bcrypt.compare(password, findUser.password)) {
+    if (findUser && (await bcrypt.compare(password, findUser.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...user } = findUser;
 

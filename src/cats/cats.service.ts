@@ -1,8 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Cat } from '@cats/entities/cat.entity';
-import { CreateCatDto } from './dto/create-cat.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Cat } from "@cats/entities/cat.entity";
+import { CreateCatDto } from "./dto/create-cat.dto";
 
 @Injectable()
 export class CatsService {
@@ -23,7 +23,7 @@ export class CatsService {
   async findById(id: number): Promise<Cat> {
     const cat = await this.catRepository.findOne({ where: { id } });
     if (!cat) {
-      throw new NotFoundException('Cat not found');
+      throw new NotFoundException("Cat not found");
     }
     return cat;
   }
@@ -34,7 +34,7 @@ export class CatsService {
       ...updateCatDto,
     });
     if (!cat) {
-      throw new NotFoundException('Cat not found');
+      throw new NotFoundException("Cat not found");
     }
     return this.catRepository.save(cat);
   }
@@ -42,7 +42,7 @@ export class CatsService {
   async remove(id: number): Promise<void> {
     const result = await this.catRepository.delete(id);
     if (result.affected === 0) {
-      throw new NotFoundException('Cat not found');
+      throw new NotFoundException("Cat not found");
     }
   }
 }
